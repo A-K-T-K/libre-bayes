@@ -1,0 +1,6 @@
+fastapi>=0.111
+uvicorn[standard]>=0.30
+pydantic>=2.7
+pgmpy>=0.1.26
+numpy>=1.26
+opt_einsum>=3.3

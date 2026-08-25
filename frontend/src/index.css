@@ -1,0 +1,49 @@
+/*
+ * The app is a single fixed-size shell (title bar + menu + ribbon + canvas)
+ * meant to exactly fill the OS window with no page-level scrolling of its
+ * own -- any scrollbar here means the outer document grew past 100vh/100vw,
+ * which happens the instant the browser's default `body` margin (8px) is
+ * left in place: an element sized to exactly 100vh still pushes the
+ * document 16px taller than the viewport once that margin is added.
+ */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+ * Fluent UI v9 mounts a full-viewport portal wrapper (position:absolute; inset:0;
+ * pointer-events:auto) for every floating surface (Dropdown listbox, Menu popover,
+ * Tooltip, Dialog) the instant its trigger gains focus/hover -- even while the
+ * popup content itself is still display:none. That wrapper is a real
+ * FluentProvider (re-providing theme tokens to the portalled content), so it
+ * also inherits FluentProvider's own opaque `background-color: colorNeutralBackground1`
+ * fill. Left alone it (a) silently swallows every click across the whole app
+ * the moment any such trigger is focused/hovered, since it sits above
+ * everything else in the stacking order, and (b) paints a solid sheet over the
+ * entire viewport behind its own small bubble. Neutralize both so only the
+ * actual rendered popup content is interactive/visible.
+ */
+body > .fui-FluentProvider {
+  pointer-events: none;
+  background: transparent !important;
+}
+
+body > .fui-FluentProvider > * {
+  pointer-events: auto;
+}
