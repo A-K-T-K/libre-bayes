@@ -341,6 +341,7 @@ interface CptTableProps {
 
 function CptTable({ node, parentDefs, onCellChange, onRenameState, fill }: CptTableProps) {
   const styles = useStyles();
+  const theme = useNetworkStore((s) => s.theme);
   const hotRef = useRef<HotTableRef>(null);
   const headerTiers = useMemo(() => buildHeaderTiers(parentDefs), [parentDefs]);
   const validity = useMemo(() => columnValidity(node.cpt), [node.cpt]);
@@ -464,7 +465,7 @@ function CptTable({ node, parentDefs, onCellChange, onRenameState, fill }: CptTa
         height={fill ? "100%" : 240}
         width="100%"
         stretchH="all"
-        className="ht-theme-main"
+        className={theme === "dark" ? "ht-theme-main-dark" : "ht-theme-main"}
       />
     </div>
   );

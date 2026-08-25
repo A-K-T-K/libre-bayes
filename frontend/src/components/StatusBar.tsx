@@ -3,6 +3,7 @@ import { CheckmarkCircleRegular, ErrorCircleRegular } from "@fluentui/react-icon
 import { useMemo } from "react";
 
 import { isValidDag } from "../lib/dag";
+import { MODES } from "../lib/modes";
 import { useNetworkStore } from "../store/useNetworkStore";
 
 const useStyles = makeStyles({
@@ -35,11 +36,13 @@ export function StatusBar() {
   const selectedNodeId = useNetworkStore((s) => s.selectedNodeId);
   const evidenceCount = useNetworkStore((s) => Object.keys(s.evidence).length);
   const tool = useNetworkStore((s) => s.tool);
+  const mode = useNetworkStore((s) => s.mode);
 
   const nodeIds = useMemo(() => Object.keys(nodeDefs), [nodeDefs]);
   const dagValid = useMemo(() => isValidDag(nodeIds, edges), [nodeIds, edges]);
 
   const selectedNode = selectedNodeId ? nodeDefs[selectedNodeId] : undefined;
+  const modeHint = MODES.find((m) => m.value === mode)?.hint;
 
   return (
     <div className={styles.bar}>
@@ -69,6 +72,15 @@ export function StatusBar() {
           ? `${selectedNode.id} — ${selectedNode.states.length} states, ${selectedNode.parents.length} parent${selectedNode.parents.length === 1 ? "" : "s"}`
           : "No node selected"}
       </Text>
+
+      {modeHint && (
+        <>
+          <div className={styles.divider} />
+          <Text size={200} truncate>
+            {modeHint}
+          </Text>
+        </>
+      )}
 
       <div className={styles.spacer} />
 

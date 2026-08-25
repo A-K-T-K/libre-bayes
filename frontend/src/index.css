@@ -47,3 +47,45 @@ body > .fui-FluentProvider {
 body > .fui-FluentProvider > * {
   pointer-events: auto;
 }
+
+/*
+ * Native scrollbars don't follow the Fluent theme on their own -- without
+ * this they stay light-styled even in dark mode. Rooted at <html> (synced
+ * from App.tsx's `data-theme`) rather than scoped to any one component's
+ * subtree, since Fluent portals Dialogs/Menus/Dropdowns straight to
+ * document.body, outside the app's own DOM tree.
+ */
+html[data-theme="dark"] {
+  scrollbar-color: #5b5b5b transparent;
+}
+
+html[data-theme="light"] {
+  scrollbar-color: #c4c4c4 transparent;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background-color: #5b5b5b;
+}
+
+html[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background-color: #c4c4c4;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #8a8a8a;
+}

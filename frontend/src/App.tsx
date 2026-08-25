@@ -131,6 +131,7 @@ function Canvas() {
   const setSelectionIds = useNetworkStore((s) => s.setSelectionIds);
   const clearSelection = useNetworkStore((s) => s.clearSelection);
   const showMinimap = useNetworkStore((s) => s.showMinimap);
+  const theme = useNetworkStore((s) => s.theme);
   const tool = useNetworkStore((s) => s.tool);
   const setTool = useNetworkStore((s) => s.setTool);
   const addNodeAt = useNetworkStore((s) => s.addNodeAt);
@@ -372,6 +373,7 @@ function Canvas() {
       onMouseDownCapture={handlePaneMouseDown}
     >
       <ReactFlow
+        colorMode={theme}
         nodes={[...nodes, ...ghostNode]}
         edges={edges}
         nodeTypes={nodeTypes}
@@ -462,6 +464,19 @@ export default function App() {
       triggerInitialInference();
     }
   }, []);
+
+  // Without `color-scheme`, native chrome (scrollbars, form control
+  // defaults) stays light-styled regardless of which Fluent theme is
+  // active -- and on Windows, the OS's own "force dark mode for apps"
+  // heuristic can double itself over an app it doesn't realize already
+  // re-themed, washing out text Fluent already painted correctly.
+  // `data-theme` drives the hand-styled scrollbars in index.css -- rooted
+  // at <html> rather than scoped to this component's own subtree, since
+  // Fluent portals Dialogs/Menus/Dropdowns straight to document.body.
+  useEffect(() => {
+    document.documentElement.style.colorScheme = theme;
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   return (
     <FluentProvider theme={theme === "dark" ? webDarkTheme : webLightTheme} className={styles.root}>

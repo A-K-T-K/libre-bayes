@@ -1,14 +1,8 @@
 import { Tooltip, makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
-import { CutRegular, EyeRegular, WrenchRegular } from "@fluentui/react-icons";
 
+import { MODES } from "../lib/modes";
 import { useNetworkStore } from "../store/useNetworkStore";
 import type { AppMode } from "../lib/types";
-
-const MODES: { value: AppMode; label: string; icon: typeof WrenchRegular; hint: string }[] = [
-  { value: "design", label: "Design & Edit", icon: WrenchRegular, hint: "Build structure, edit CPTs, arrange the canvas" },
-  { value: "observe", label: "Observation", icon: EyeRegular, hint: "Click a state to pin it as observed evidence — P(Y | X=x)" },
-  { value: "intervene", label: "Intervention", icon: CutRegular, hint: "Click a state to do() it — P(Y | do(X=x)), cutting incoming influence" },
-];
 
 const useStyles = makeStyles({
   group: {
