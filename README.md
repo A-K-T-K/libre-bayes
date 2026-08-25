@@ -21,6 +21,7 @@
 </p>
 
 <p align="center">
+  <a href="https://a-k-t-k.github.io/libre-bayes/"><strong>📖 Full Documentation</strong></a> ·
   <a href="#features">Features</a> ·
   <a href="#getting-started">Getting Started</a> ·
   <a href="#dynamic-bayesian-networks">Dynamic BN</a> ·
