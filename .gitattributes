@@ -1,0 +1,10 @@
+# Force LF regardless of a contributor's local autocrlf setting -- run.sh in
+# particular must never pick up CRLF line endings (breaks the shebang and
+# execution on actual Linux/macOS) no matter what platform it was committed
+# from.
+*.sh text eol=lf
+*.py text eol=lf
+
+# Conventional for Windows batch files; not strictly required to run, but
+# keeps it consistent with how most editors/tools expect a .bat to look.
+*.bat text eol=crlf

@@ -108,6 +108,22 @@ Dynamic BN Inspector in action._
 | Node.js | 18+ |
 | Rust toolchain | stable (only for the desktop build — see [Tauri prerequisites](https://tauri.app/start/prerequisites/)) |
 
+### One-click launcher (easiest)
+
+Skip the manual setup below entirely — just run the launcher for your OS from the repo root:
+
+| OS | Command |
+| --- | --- |
+| Windows | double-click `run.bat` |
+| macOS / Linux | `./run.sh` |
+| Any OS | `python run.py` |
+
+The **first run** sets up the backend's virtualenv and builds a release binary (a few minutes — Rust needs to
+compile). **Every run after that just opens the app directly**, since building is by far the slowest step and
+nothing here forces a rebuild until you ask for one with `--rebuild`. Pass `--dev` instead to run via `tauri dev`
+(live reload) rather than a release build. Requires Python 3.10+, Node.js 18+, and the Rust toolchain the first
+time only — a prebuilt [portable copy](#portable-build) needs only Python.
+
 ### Backend (FastAPI + pgmpy)
 
 ```bash
@@ -142,6 +158,19 @@ npm run tauri dev
 
 This launches the native window and spawns the FastAPI backend as a managed subprocess automatically — no separate
 `uvicorn` step needed. Build a distributable installer with `npm run tauri build`.
+
+### Portable build
+
+```bash
+python scripts/make_portable.py
+```
+
+Builds a release binary (if one doesn't already exist) and assembles a self-contained, no-installer-required copy
+at `dist-portable/<windows|macos|linux>/` — the binary, a trimmed copy of `backend/` (no virtualenv, no
+`__pycache__`), and the `run.py`/`run.sh`/`run.bat` launchers. Zip that folder and hand it to someone else: as long
+as they have Python 3.10+, running the launcher sets up the backend virtualenv on first launch and opens directly
+on every one after that — no Node, no Rust, no manual `pip install`. Only packages a binary for the OS it's run on
+(Tauri builds aren't cross-compiled here), so run it once per target OS on that OS.
 
 ## Dynamic Bayesian Networks
 
@@ -206,12 +235,15 @@ author and register one live from the app via the **+ Custom Inference Method…
 
 ```
 bayes/
-├── backend/              FastAPI + pgmpy inference engine
-│   ├── engine.py          Network construction, solver dispatch, MAP/temporal queries
-│   ├── schema.py           Pydantic v2 wire-format contract
-│   ├── solvers/            Pluggable inference algorithms
-│   ├── pgmpy_features.py   Structure/parameter learning, independence, simulation
-│   └── formats.py          BIF / NET / XDSL / DSC import & export
+├── run.py / run.sh / run.bat   One-click build-once-then-launch-fast scripts
+├── scripts/make_portable.py    Assembles a no-installer-required portable copy
+├── backend/               FastAPI + pgmpy inference engine
+│   ├── engine.py           Network construction, solver dispatch, MAP/temporal queries
+│   ├── schema.py            Pydantic v2 wire-format contract
+│   ├── solvers/             Pluggable inference algorithms
+│   ├── pgmpy_features.py    Structure/parameter learning, independence, simulation
+│   └── formats.py           BIF / NET / XDSL / DSC import & export
+├── docs/                  VitePress documentation site (deployed to GitHub Pages)
 └── frontend/              React + TypeScript + Tauri desktop app
     ├── src/components/     Canvas, CPT editor, dialogs, toolbars
     ├── src/store/           Zustand state (network, inference, undo/redo)

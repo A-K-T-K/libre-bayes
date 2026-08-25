@@ -9,10 +9,14 @@ frontend/*.tsbuildinfo
 frontend/src-tauri/target/
 frontend/src-tauri/gen/
 
+# Portable build output (scripts/make_portable.py) -- regenerated locally,
+# never committed.
+/dist-portable/
+
 # Python / backend
-backend/__pycache__/
-backend/**/__pycache__/
-backend/*.pyc
+__pycache__/
+**/__pycache__/
+*.pyc
 backend/.venv/
 backend/venv/
 

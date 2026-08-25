@@ -11,6 +11,15 @@ that runs either as a browser page (during development) or a native desktop app.
 | Node.js | 18+ |
 | Rust toolchain | stable (only needed for the desktop build -- see [Tauri prerequisites](https://tauri.app/start/prerequisites/)) |
 
+## Fastest path: the one-click launcher
+
+From the repo root, run the launcher for your OS -- `run.bat` (Windows), `./run.sh` (macOS/Linux), or
+`python run.py` (any OS). The first run sets up the backend virtualenv and builds a release binary (a few
+minutes); every run after that opens directly, since nothing forces a rebuild until you pass `--rebuild`. Pass
+`--dev` to run via `tauri dev` (live reload) instead. This skips everything below -- read on only if you want to
+run the pieces manually, or need a portable, no-installer-required copy (`python scripts/make_portable.py`, needs
+only Python on the target machine afterward).
+
 ## 1. Run the backend
 
 ```bash
