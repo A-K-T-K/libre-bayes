@@ -10,6 +10,9 @@ hero:
     alt: LibRE Bayes
   actions:
     - theme: brand
+      text: ⬇️ Download Portable (Windows)
+      link: https://github.com/A-K-T-K/libre-bayes/releases/latest/download/LibRE-Bayes-v0.0.1-portable-windows.zip
+    - theme: alt
       text: Get Started
       link: /getting-started
     - theme: alt

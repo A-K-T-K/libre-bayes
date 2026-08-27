@@ -21,6 +21,11 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/A-K-T-K/libre-bayes/releases/latest/download/LibRE-Bayes-v0.0.1-portable-windows.zip"><strong>⬇️ Download Portable (Windows)</strong></a> ·
+  <a href="https://github.com/A-K-T-K/libre-bayes/releases">Other releases</a>
+</p>
+
+<p align="center">
   <a href="https://a-k-t-k.github.io/libre-bayes/"><strong>📖 Full Documentation</strong></a> ·
   <a href="#features">Features</a> ·
   <a href="#getting-started">Getting Started</a> ·
@@ -44,9 +49,11 @@ without vendor lock-in or a paid license.
 - [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
+  - [Prebuilt portable download](#prebuilt-portable-download-no-setup-at-all)
   - [Backend (FastAPI + pgmpy)](#backend-fastapi--pgmpy)
   - [Frontend (React + Vite)](#frontend-react--vite)
   - [Desktop app (Tauri)](#desktop-app-tauri)
+  - [Portable build](#portable-build)
 - [Dynamic Bayesian Networks](#dynamic-bayesian-networks)
 - [Inference Algorithms](#inference-algorithms)
 - [Import / Export Formats](#import--export-formats)
@@ -102,13 +109,24 @@ Dynamic BN Inspector in action._
 
 ### Prerequisites
 
+Building from source:
+
 | Requirement | Version |
 | --- | --- |
 | Python | 3.10+ |
 | Node.js | 18+ |
 | Rust toolchain | stable (only for the desktop build — see [Tauri prerequisites](https://tauri.app/start/prerequisites/)) |
 
-### One-click launcher (easiest)
+Just running it: none — grab the [prebuilt portable download](#prebuilt-portable-download-no-setup-at-all) instead.
+
+### Prebuilt portable download (no setup at all)
+
+**[⬇️ Download the portable Windows build](https://github.com/A-K-T-K/libre-bayes/releases/latest/download/LibRE-Bayes-v0.0.1-portable-windows.zip)**
+— unzip it and double-click `run.bat`. That's the entire installation: no Python, no Node, no Rust, no admin
+rights, no internet access. A full Python runtime and every backend dependency are already bundled inside. See
+[Portable build](#portable-build) below for how it's built and what's in it.
+
+### One-click launcher (building from source)
 
 Skip the manual setup below entirely — just run the launcher for your OS from the repo root:
 
@@ -121,8 +139,9 @@ Skip the manual setup below entirely — just run the launcher for your OS from 
 The **first run** sets up the backend's virtualenv and builds a release binary (a few minutes — Rust needs to
 compile). **Every run after that just opens the app directly**, since building is by far the slowest step and
 nothing here forces a rebuild until you ask for one with `--rebuild`. Pass `--dev` instead to run via `tauri dev`
-(live reload) rather than a release build. Requires Python 3.10+, Node.js 18+, and the Rust toolchain the first
-time only — a prebuilt [portable copy](#portable-build) needs only Python.
+(live reload) rather than a release build. Requires Python 3.10+, Node.js 18+, and the Rust toolchain — or skip all
+of that with the [prebuilt portable download](#prebuilt-portable-download-no-setup-at-all) above, which needs
+nothing installed at all.
 
 ### Backend (FastAPI + pgmpy)
 
@@ -165,12 +184,20 @@ This launches the native window and spawns the FastAPI backend as a managed subp
 python scripts/make_portable.py
 ```
 
-Builds a release binary (if one doesn't already exist) and assembles a self-contained, no-installer-required copy
-at `dist-portable/<windows|macos|linux>/` — the binary, a trimmed copy of `backend/` (no virtualenv, no
-`__pycache__`), and the `run.py`/`run.sh`/`run.bat` launchers. Zip that folder and hand it to someone else: as long
-as they have Python 3.10+, running the launcher sets up the backend virtualenv on first launch and opens directly
-on every one after that — no Node, no Rust, no manual `pip install`. Only packages a binary for the OS it's run on
-(Tauri builds aren't cross-compiled here), so run it once per target OS on that OS.
+Builds a release binary (if one doesn't already exist) and assembles a **fully self-contained** copy at
+`dist-portable/<windows|macos|linux>/` — the binary, a trimmed copy of `backend/` (no `__pycache__`), and, on
+Windows, a private Python runtime with every backend dependency already installed
+(`scripts/bundle_python_runtime.py`, built from `python.org`'s embeddable distribution plus this repo's own
+resolved `backend/.venv`, so it doesn't need to re-resolve or redownload anything). Zip that folder and hand it to
+anyone: double-click `run.bat` and it opens — no Python, no Node, no Rust, no `pip install`, no internet access,
+nothing to type. `run-debug.bat` runs the same thing with verbose logging (`logs/app.log`, `logs/backend.log`) and
+the devtools console opened, for diagnosing a failure that isn't self-explanatory in the UI. (macOS/Linux don't
+have an embeddable Python distribution to bundle the same way, so those still fall back to `run.py`'s
+venv-on-first-launch flow and need Python 3.10+ present.) Only packages a binary for the OS it's run on (Tauri
+builds aren't cross-compiled here), so run it once per target OS on that OS.
+
+The [prebuilt portable download](#prebuilt-portable-download-no-setup-at-all) at the top of this section is exactly
+this output, zipped and attached to a [GitHub release](https://github.com/A-K-T-K/libre-bayes/releases).
 
 ## Dynamic Bayesian Networks
 
@@ -235,8 +262,10 @@ author and register one live from the app via the **+ Custom Inference Method…
 
 ```
 bayes/
-├── run.py / run.sh / run.bat   One-click build-once-then-launch-fast scripts
-├── scripts/make_portable.py    Assembles a no-installer-required portable copy
+├── run.py / run.sh / run.bat           One-click build-once-then-launch-fast scripts
+├── run-debug.sh / run-debug.bat        Same, with verbose logs + devtools opened
+├── scripts/make_portable.py            Assembles a fully self-contained portable copy
+├── scripts/bundle_python_runtime.py    Bundles a private Python + deps for the portable build (Windows)
 ├── backend/               FastAPI + pgmpy inference engine
 │   ├── engine.py           Network construction, solver dispatch, MAP/temporal queries
 │   ├── schema.py            Pydantic v2 wire-format contract

@@ -1,7 +1,7 @@
 {
   "name": "libre-bayes",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,6 +17,7 @@
     "@handsontable/react-wrapper": "^18.0.0",
     "@tauri-apps/plugin-dialog": "^2.7.2",
     "@tauri-apps/plugin-fs": "^2.5.1",
+    "@tauri-apps/plugin-http": "^2.5.9",
     "@xyflow/react": "^12.3.0",
     "handsontable": "^18.0.0",
     "jspdf": "^4.2.1",

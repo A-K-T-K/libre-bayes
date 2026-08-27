@@ -3,6 +3,17 @@
 LibRE Bayes is two cooperating pieces: a **FastAPI + pgmpy** inference backend, and a **React + Tauri** frontend
 that runs either as a browser page (during development) or a native desktop app.
 
+## Fastest path: the prebuilt portable download
+
+**[⬇️ Download the portable Windows build](https://github.com/A-K-T-K/libre-bayes/releases/latest/download/LibRE-Bayes-v0.0.1-portable-windows.zip)**
+-- unzip it and double-click `run.bat`. Nothing else needed: no Python, no Node, no Rust, no admin rights, no
+internet access. A full Python runtime and every backend dependency are bundled inside already (see
+[`scripts/bundle_python_runtime.py`](https://github.com/A-K-T-K/libre-bayes/blob/main/scripts/bundle_python_runtime.py)).
+If something fails with a message that isn't self-explanatory, run `run-debug.bat` instead -- it opens the
+devtools console and writes `logs\app.log` / `logs\backend.log` next to the executable.
+
+Everything below is for building from source instead.
+
 ## Prerequisites
 
 | Requirement | Version |
@@ -11,14 +22,14 @@ that runs either as a browser page (during development) or a native desktop app.
 | Node.js | 18+ |
 | Rust toolchain | stable (only needed for the desktop build -- see [Tauri prerequisites](https://tauri.app/start/prerequisites/)) |
 
-## Fastest path: the one-click launcher
+## Fastest path (from source): the one-click launcher
 
 From the repo root, run the launcher for your OS -- `run.bat` (Windows), `./run.sh` (macOS/Linux), or
 `python run.py` (any OS). The first run sets up the backend virtualenv and builds a release binary (a few
 minutes); every run after that opens directly, since nothing forces a rebuild until you pass `--rebuild`. Pass
 `--dev` to run via `tauri dev` (live reload) instead. This skips everything below -- read on only if you want to
-run the pieces manually, or need a portable, no-installer-required copy (`python scripts/make_portable.py`, needs
-only Python on the target machine afterward).
+run the pieces manually, or need to build your own portable, no-installer-required copy
+(`python scripts/make_portable.py`).
 
 ## 1. Run the backend
 

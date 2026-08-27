@@ -17,6 +17,10 @@
     "core:window:allow-set-title",
     "dialog:allow-save",
     "fs:allow-write-text-file",
-    "fs:allow-write-file"
+    "fs:allow-write-file",
+    {
+      "identifier": "http:default",
+      "allow": [{ "url": "http://127.0.0.1:8000/*" }]
+    }
   ]
 }

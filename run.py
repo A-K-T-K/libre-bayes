@@ -139,10 +139,24 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--dev", action="store_true", help="run via `tauri dev` (live reload) instead of a release build")
     parser.add_argument("--rebuild", action="store_true", help="force a fresh release build and virtualenv, even if one already exists")
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help=(
+            "verbose logging + auto-opened devtools, for diagnosing a failure "
+            "that isn't self-explanatory in the UI (e.g. a bare 'inference "
+            "request failed'). Writes logs/app.log (Rust/backend-spawn side) "
+            "and logs/backend.log (the Python backend's own stdout/stderr) "
+            "next to the executable; devtools shows frontend/network errors."
+        ),
+    )
     args = parser.parse_args()
 
     if not BACKEND_DIR.is_dir():
         die(f"backend/ not found next to this script ({REPO_ROOT})")
+
+    if args.debug:
+        os.environ["LIBRE_BAYES_DEBUG"] = "1"
 
     if args.dev:
         run_dev()
@@ -157,6 +171,8 @@ def main() -> None:
         log(f"already built -- launching {binary}")
 
     os.chdir(binary.parent)
+    if args.debug:
+        log(f"debug mode -- logs will be written to {binary.parent / 'logs'}")
     subprocess.run([str(binary)], check=True)
 
 

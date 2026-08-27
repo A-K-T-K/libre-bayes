@@ -13,6 +13,9 @@ frontend/src-tauri/gen/
 # never committed.
 /dist-portable/
 
+# Downloaded embeddable-Python cache (scripts/bundle_python_runtime.py)
+/.cache/
+
 # Python / backend
 __pycache__/
 **/__pycache__/
